@@ -53,7 +53,7 @@ async def on_ready():
 
     state = load_state()
 
-    for category in sorted(DATA_DIR.iterdir()):
+    for category in sorted(DATA_DIR.iterdir(), key=lambda p: p.name.lower()):
         if not category.is_dir():
             continue
 
