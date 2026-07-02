@@ -2,8 +2,8 @@ name: Daily Discord Post
 
 on:
   schedule:
-    # 7:30 PM IST = 2:00 PM UTC
-    - cron: "30 05 * * *"
+    # 11:05 PM IST = 5:35 PM UTC
+    - cron: "35 17 * * *"
   workflow_dispatch:
 
 jobs:
