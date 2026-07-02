@@ -1,4 +1,4 @@
-Divine=2
-capricious=4
-malevolent=4
-neutral=4
+Divine=0
+capricious=0
+malevolent=0
+neutral=0
