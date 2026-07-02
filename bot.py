@@ -1,5 +1,5 @@
 import os
-import json
+import re
 from pathlib import Path
 import discord
 
@@ -11,6 +11,12 @@ STATE_FILE = Path("state.txt")
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
+
+
+def natural_key(path):
+    name = path.stem.lower()
+    parts = re.split(r"(\d+)", name)
+    return [int(p) if p.isdigit() else p for p in parts]
 
 
 def load_state():
@@ -30,7 +36,7 @@ def load_state():
 
 def save_state(state):
     with open(STATE_FILE, "w", encoding="utf-8") as f:
-        for k, v in state.items():
+        for k, v in sorted(state.items()):
             f.write(f"{k}={v}\n")
 
 
@@ -40,7 +46,7 @@ async def on_ready():
 
     channel = client.get_channel(CHANNEL_ID)
 
-    if not channel:
+    if channel is None:
         print("Channel not found")
         await client.close()
         return
@@ -53,31 +59,30 @@ async def on_ready():
 
         images = sorted(
             [
-                str(x)
+                x
                 for x in category.iterdir()
-                if x.suffix.lower() in [".png", ".jpg", ".jpeg", ".webp"]
-            ]
+                if x.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")
+            ],
+            key=natural_key
         )
 
         if not images:
             continue
 
-        current_index = state.get(category.name, 0)
+        current = state.get(category.name, 0)
 
-        # Category finished, skip it.
-        if current_index >= len(images):
+        # Finished this category
+        if current >= len(images):
             continue
 
-        pair = images[current_index:current_index + 2]
-
-        files = [discord.File(img) for img in pair]
+        pair = images[current:current + 2]
 
         await channel.send(
             content=f"**{category.name}**",
-            files=files
+            files=[discord.File(str(img)) for img in pair]
         )
 
-        state[category.name] = current_index + len(pair)
+        state[category.name] = current + len(pair)
 
     save_state(state)
 
