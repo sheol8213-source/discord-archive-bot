@@ -20,9 +20,9 @@ DATA_DIR = "data"
 CATEGORIES = ["Divine", "capricious", "malevolent", "neutral"]
 
 # Time (UTC) the bot should post daily.
-# 6:31 PM IST = 01:02 PM UTC (IST is UTC+5:30)
+# 6:35 PM IST = 1:05 PM UTC (IST is UTC+5:30)
 POST_HOUR_UTC = 13
-POST_MINUTE_UTC = 02
+POST_MINUTE_UTC = 05
 
 # The date we start counting "day 0" from. Don't change this once you've
 # deployed, or your pairing sequence will jump around.
